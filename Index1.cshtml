@@ -1,0 +1,205 @@
+
+@{
+    ViewBag.Title = "idex1";
+}
+<font size="6" face="黑体" color="red">   请输入个人学生详细信息</font>
+
+
+<script>
+
+    function checkpsd1() {
+
+        var u = document.getElementById("psd1");
+        var t = document.getElementById("tip2");
+        var reg = /^[0-9]{6}$/;
+        if (u == null || u.value.length == 0) {
+
+            t.innerHTML = "密码必填，不能为空";
+        }
+        else if (!reg.test(u.value)) {
+
+            t.innerHTML = "密码为6位数字";
+        }
+        else {
+
+            t.innerHTML = "";
+        }
+
+
+    }
+
+
+    function checkpsd2() {
+
+        var u = document.getElementById("psd2");
+        var t = document.getElementById("tip3");
+        var n = document.getElementById("psd1");
+
+        if (u == null || u.value.length == 0) {
+
+            t.innerHTML = "密码必填，不能为空";
+
+
+        }
+
+
+        else if (u.value != n.value) {
+
+            t.innerHTML = "密码一不致";
+        }
+        else {
+
+            t.innerHTML = "";
+        }
+
+
+    }
+
+
+
+    function checktel() {
+
+        var u = document.getElementById("tel");
+        var t = document.getElementById("tip5");
+        var reg = /^1[0-13]{7}$/;
+
+
+        if (u == null || u.value.length == 0) {
+
+            t.innerHTML = "电话号码不能为空";
+        }
+        else if (!reg.test(u.value)) {
+
+            t.innerHTML = "电话格式不对，以1569开头11位数";
+        }
+        else {
+
+            t.innerHTML = "";
+        }
+
+
+    }
+
+
+
+
+
+
+</script>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#dept").change(function () {
+
+                switch ($("#dept").val()) {
+                    case "": $("#major").empty(); $("#major").append("<option value=''></option>"); break;
+                    case "1": $("#major").empty();
+                        $("#major").append("<option value='cs'>武汉</option>");
+                        $("#major").append("<option value='se'>内蒙古</option>"); break;
+                    case "2": $("#major").empty();
+                        $("#major").append("<option value='se'>南昌</option>");
+                        $("#major").append("<option value='cs'>新余</option>");
+                        break;
+                        break;
+                }
+            });
+        });
+
+
+        $("#btn1").click(function () {
+
+            var str = "";
+            str = "姓名：" + $("#username").val() + "\n";
+            str += "性别：" + $(":radio[name='sex']:checked").val() + "\n";
+            str += "年龄：" + $("#psd1").val() + "\n"
+            str += "密码：" + $("#psd1").val() + "\n"
+            str += "手机号:" + $("#tel").val() + "\n";
+            str += "体温:" + $("#tel").val() + "\n";
+            str += "出生日期:" + $("#dp").val() + "\n";
+            str += "填表日期:" + $("#dp").val() + "\n";
+            alert(str);
+        });
+
+        $("#username").blur(function () {
+
+            var username = $("#username").val();
+            $.ajax({
+
+                type: "post",        //以post方式与后台沟通
+                url: "CheckUsername", //调用action
+                data: "username=" + username, //传送的数据
+                dataType: "html", //从action返回的值以html方式解释，或用"text"
+                success: function (msg) { //如果调用成功，msg为后台action返回值
+                    $('#result').html(msg);
+                    //显示action返回值
+                }
+            });
+        });
+    </script>
+    <script src="~/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
+    <link href="~/jquery-ui-1.11.1.custom/jquery-ui.css" rel="stylesheet">
+    <script type="text/javascript">
+    $(document).ready(function () { $("#dp").datepicker({ dateFormat: "yy-mm-dd", inline: true }); });
+    </script>
+
+}
+
+<form method="get" οnsubmit="return check()">
+
+    用户名<input type="text" id="username" οnblur="">
+    <span id="result" style="color:red;"></span>
+
+
+    <br />
+
+
+    密码<input type="password" id="psd1" maxlength="6" οnblur="checkpsd1()">
+    <span id="tip2" style="color:red;"></span>
+    <br />
+    确认密码<input type="password" id="psd2" maxlength="6" οnblur="checkpsd2()">
+    <span id="tip3" style="color:red;"></span>
+    <br />
+
+    性别<input type="radio" name="sex" value="男" checked="checked">男
+    <input type="radio" name="sex" value="女">女
+    <br />
+
+
+    手机号<input type="tel" id="tel" οnblur="checktel()">
+    <span id="tip5" style="color:red;"></span>
+    <br />
+
+
+    出生日期<input type="text" id="dp"><br />
+
+    填表日期<input type="text" id="dp"><br />
+
+
+
+
+
+
+
+
+
+
+    <table>
+
+
+        <tr>
+            <td style="text-align:right ;">               </td>
+            <td style="text-align:left ; "><input type="button" value="提交" id="btn1" /></td>
+            <td style="text-align:left ;"><input type="reset" value="重填" /></td>
+
+
+        </tr>
+    </table>
+
+
+</form>
+
+
+
+
+
